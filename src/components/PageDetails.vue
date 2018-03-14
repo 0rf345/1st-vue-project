@@ -1,7 +1,7 @@
 <template>
   <div class="pagedetails">
-    <p>{{ pageName }}</p>
-    <span v-show="!edittingPage && !addingPost">
+    <p><b><h1>{{ pageName }}</h1></b></p>
+    <span v-show="!edittingPage && !addingPost && !focOnPost">
       <button class="button" @click="edittingPage = true; addingPost = false">Edit Page</button>
       <button class="button" @click="addingPost = true; edittingPage = false">Add Post</button>
     </span>
@@ -18,9 +18,18 @@
         <button type="submit">Add this</button><button @click="addingPost = false">Cancel</button>
       </form>
     </div>
-    <div id="userPosts">
+    <div id="userPosts" v-show="!focOnPost">
       <p>Posts for this page</p>
-      <p v-for="post in posts" :key="post.id" class="userPost">{{ post.name }}</p>
+      <p v-for="post in posts" :key="post.id" class="userPost" @click="userPostClicked(post)">{{ post.name }}</p>
+    </div>
+    <div v-show="focOnPost">
+      <p>{{ focPost.name }}</p>
+      <br>
+      <form @submit.prevent="changePostName">
+        <input type="text" placeholder="Type new name" required />
+        <button type="submit">Change</button>
+      </form>
+      <button class="red" @click="deletePost()">Delete Post</button>
     </div>
   </div>
 </template>
@@ -33,7 +42,9 @@ export default {
       posts: [],
       edittingPage: false,
       addingPost: false,
-      pageName: this.page.name
+      pageName: this.page.name,
+      focOnPost: false,
+      focPost: {}
     }
   },
   props: [
@@ -46,7 +57,6 @@ export default {
   },
   methods: {
     changeName: function (e) {
-      console.log(e)
       //  Value of input field
       this.pageName = e.target[0].value
       this.edittingPage = false
@@ -58,6 +68,18 @@ export default {
     },
     deletePage: function () {
       this.$emit('deletePage')
+    },
+    userPostClicked: function (post) {
+      this.focOnPost = true
+      this.focPost = post
+    },
+    changePostName: function (e) {
+      this.focPost.name = e.target[0].value
+      this.focOnPost = false
+    },
+    deletePost: function () {
+      this.focOnPost = false
+      this.posts.splice(this.posts.indexOf(this.focPost), 1)
     }
   }
 }
