@@ -10,6 +10,7 @@
         <span>
           <button class="button" @click="inSettings=true">Settings</button>
           <button class="button" @click="createUserPagePage()" v-focus>+</button>
+          <button class="button" @click="createJSONdata()">JSON of Data</button>
         </span>
         <div id="userPages">
           <p>User Created Pages</p>
@@ -87,9 +88,9 @@ export default {
       this.creatingSomething = false
     },
     userPclicked: function (userPage) {
+      this.clickedPage = userPage
       this.selectedPage = true
       this.$emit('createBackButton')
-      this.clickedPage = userPage
     },
     deleteUserPage: function () {
       this.userPages.splice(this.userPages.indexOf(this.clickedPage), 1)
@@ -100,6 +101,9 @@ export default {
     postColorChange: function (e) {
       this.inSettings = false
       this.postBorderColor = e.target[0].value
+    },
+    createJSONdata: function () {
+      console.log(JSON.stringify(this.userPages))
     }
   },
   directives: {
