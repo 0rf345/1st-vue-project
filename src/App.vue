@@ -1,7 +1,7 @@
 <template>
   <div id="app">
-    <navbar :back="createBackButtonProp" @backSignal="backPressed"></navbar>
-    <home @createBackButton="backButtonCreate" :justBack="cameBack" @gotIt="cameBack=false"></home>
+    <navbar :back="createBackButtonProp" @homeSignal="homePressed()" @backSignal="backPressed"></navbar>
+    <home @createBackButton="backButtonCreate" :justHome="cameHome" :justBack="cameBack" @gotIt="cameBack=cameHome = false"></home>
     <projectFooter></projectFooter>
   </div>
 </template>
@@ -16,7 +16,8 @@ export default {
   data () {
     return {
       createBackButtonProp: false,
-      cameBack: false
+      cameBack: false,
+      cameHome: false
     }
   },
   components: {
@@ -30,6 +31,12 @@ export default {
     },
     backPressed: function () {
       this.createBackButtonProp = false
+      this.cameBack = true
+    },
+    homePressed: function () {
+      console.log('mpla')
+      this.createBackButtonProp = false
+      this.cameHome = true
       this.cameBack = true
     }
   }

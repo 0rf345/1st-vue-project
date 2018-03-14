@@ -45,11 +45,20 @@ export default {
     userpages, pagedetails
   },
   props: [
-    'justBack'
+    'justBack', 'justHome'
   ],
   watch: {
     justBack: function () {
       if (this.justBack) {
+        this.$emit('gotIt')
+        this.creatingSomething = false
+        this.selectedPage = false
+      }
+    },
+    hustHome: function () {
+      console.log('lala')
+      if (this.justHome) {
+        console.log('lala')
         this.$emit('gotIt')
         this.creatingSomething = false
         this.selectedPage = false

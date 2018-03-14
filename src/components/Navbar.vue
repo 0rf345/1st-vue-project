@@ -1,7 +1,7 @@
 <template>
   <div class="navbar">
     <ul>
-      <li><a><router-link to="/">Home</router-link></a></li>
+      <li @click="$emit('homeSignal')"><a><router-link to="/">Home</router-link></a></li>
       <li><a><router-link to="mpla">Mpla</router-link></a></li>
       <li v-show="back" @click="$emit('backSignal')"><a><router-link to="/">Back</router-link></a></li>
       <!--
