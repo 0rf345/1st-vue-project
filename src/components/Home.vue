@@ -30,7 +30,7 @@
       </div>
     </div>
     <div class="pageDetails" v-show="selectedPage">
-      <pagedetails :borderColor="postBorderColor" :page="clickedPage" @changedNameOfUP="clickedPage.name = $event" @deletePage="deleteUserPage"></pagedetails>
+      <pagedetails :stringAlert="iWantAstring" @JSONposts="getJSONposts" :borderColor="postBorderColor" :page="clickedPage" @changedNameOfUP="clickedPage.name = $event" @deletePage="deleteUserPage"></pagedetails>
     </div>
   </div>
 </template>
@@ -38,6 +38,7 @@
 <script>
 import userpages from '@/components/UserPages'
 import pagedetails from '@/components/PageDetails'
+var FileSaver = require('file-saver')
 
 export default {
   name: 'Home',
@@ -46,6 +47,7 @@ export default {
       creatingSomething: false,
       selectedPage: false,
       inSettings: false,
+      iWantAstring: false,
       clickedPage: {},
       userPages: [],
       newPage: {},
@@ -103,7 +105,19 @@ export default {
       this.postBorderColor = e.target[0].value
     },
     createJSONdata: function () {
-      console.log(JSON.stringify(this.userPages))
+      this.iWantAstring = true
+      console.log('Pages: ' + JSON.stringify(this.userPages))
+    },
+    getJSONposts: function (e) {
+      this.iWantAstring = false
+      var blob = new Blob([this.jsonPages + e], {type: 'text/plain;charset=utf-8'})
+      FileSaver.saveAs(blob, 'project-data.json')
+      console.log(this.jsonPages + e)
+    }
+  },
+  computed: {
+    jsonPages: function () {
+      return 'Pages: ' + JSON.stringify(this.userPages)
     }
   },
   directives: {

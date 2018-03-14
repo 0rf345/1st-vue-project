@@ -47,7 +47,7 @@ export default {
     }
   },
   props: [
-    'page', 'borderColor'
+    'page', 'borderColor', 'stringAlert'
   ],
   methods: {
     changeName: function (e) {
@@ -64,7 +64,6 @@ export default {
       }
       this.posts[this.pageName].push({name: e.target[0].value})
       this.addingPost = false
-      console.log(JSON.stringify(this.posts))
     },
     deletePage: function () {
       this.$emit('deletePage')
@@ -91,6 +90,13 @@ export default {
     },
     currentPosts: function () {
       return this.posts[this.page.name]
+    }
+  },
+  watch: {
+    stringAlert: function () {
+      if (this.stringAlert) {
+        this.$emit('JSONposts', 'Posts: ' + JSON.stringify(this.posts))
+      }
     }
   }
 }
