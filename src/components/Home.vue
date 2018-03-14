@@ -21,7 +21,7 @@
       </div>
     </div>
     <div class="pageDetails" v-else>
-      <pagedetails :page="clickedPage"></pagedetails>
+      <pagedetails :page="clickedPage" @changedNameOfUP="clickedPage.name = $event"></pagedetails>
     </div>
   </div>
 </template>

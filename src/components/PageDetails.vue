@@ -49,7 +49,7 @@ export default {
       //  Value of input field
       this.pageName = e.target[0].value
       this.edittingPage = false
-      // Need to emit this info
+      this.$emit('changedNameOfUP', this.pageName)
     },
     addPost: function (e) {
       this.posts.push({name: e.target[0].value})
