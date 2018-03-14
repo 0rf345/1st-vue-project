@@ -44,6 +44,18 @@ export default {
   components: {
     userpages, pagedetails
   },
+  props: [
+    'justBack'
+  ],
+  watch: {
+    justBack: function () {
+      if (this.justBack) {
+        this.$emit('gotIt')
+        this.creatingSomething = false
+        this.selectedPage = false
+      }
+    }
+  },
   methods: {
     createUserPagePage: function () {
       this.creatingSomething = true
@@ -57,6 +69,7 @@ export default {
     },
     userPclicked: function (userPage) {
       this.selectedPage = true
+      this.$emit('createBackButton')
       this.clickedPage = userPage
     }
   },

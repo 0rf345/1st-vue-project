@@ -3,6 +3,7 @@
     <ul>
       <li><a><router-link to="/">Home</router-link></a></li>
       <li><a><router-link to="mpla">Mpla</router-link></a></li>
+      <li v-show="back" @click="$emit('backSignal')"><a><router-link to="/">Back</router-link></a></li>
       <!--
       <li v-for="page in pages" :key="page.id"><a @click="iWasClicked(page)">{{ page }}</a></li>
       <li class="dropdown">
@@ -25,6 +26,9 @@ export default {
       userPages: ['ExPage1', 'ExPage2', 'ExPage3']
     }
   },
+  props: [
+    'back'
+  ],
   methods: {
     iWasClicked: function (page) {
       console.log(page)

@@ -1,7 +1,7 @@
 <template>
   <div id="app">
-    <navbar></navbar>
-    <router-view></router-view>
+    <navbar :back="createBackButtonProp" @backSignal="backPressed"></navbar>
+    <home @createBackButton="backButtonCreate" :justBack="cameBack" @gotIt="cameBack=false"></home>
     <projectFooter></projectFooter>
   </div>
 </template>
@@ -9,12 +9,29 @@
 <script>
 import navbar from './components/Navbar'
 import projectFooter from './components/ProjectFooter'
+import home from './components/Home'
 
 export default {
   name: 'App',
+  data () {
+    return {
+      createBackButtonProp: false,
+      cameBack: false
+    }
+  },
   components: {
     navbar,
+    home,
     projectFooter
+  },
+  methods: {
+    backButtonCreate: function () {
+      this.createBackButtonProp = true
+    },
+    backPressed: function () {
+      this.createBackButtonProp = false
+      this.cameBack = true
+    }
   }
 }
 </script>
