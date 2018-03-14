@@ -5,10 +5,10 @@
       and autofocus on the new name input as soon as they are re-rendered.
       If these are not desirable for user use, we can just remove them and gain better performance instead.
     -->
-    <div v-if="!selectedPage">
-      <div v-if="!creatingSomething">
+    <div v-show="!selectedPage">
+      <div v-if="!creatingSomething && !inSettings">
         <span>
-          <button class="button">Settings</button>
+          <button class="button" @click="inSettings=true">Settings</button>
           <button class="button" @click="createUserPagePage()" v-focus>+</button>
         </span>
         <div id="userPages">
@@ -16,12 +16,20 @@
           <p class="userPage" v-for="userPage in userPages" :key="userPage.id" @click="userPclicked(userPage)"> {{ userPage.name }}</p>
         </div>
       </div>
+      <div v-show="inSettings">
+        <p>Border color for user posts:</p>
+        <br>
+        <form @submit.prevent="postColorChange">
+          <input type="color" required />
+          <button type="submit">choose</button>
+        </form>
+      </div>
       <div v-show="creatingSomething">
         <userpages @UPsUpdated="updateUserPages($event)" @upcCancelled="cancelSubmission"></userpages>
       </div>
     </div>
-    <div class="pageDetails" v-else>
-      <pagedetails :page="clickedPage" @changedNameOfUP="clickedPage.name = $event" @deletePage="deleteUserPage"></pagedetails>
+    <div class="pageDetails" v-show="selectedPage">
+      <pagedetails :borderColor="postBorderColor" :page="clickedPage" @changedNameOfUP="clickedPage.name = $event" @deletePage="deleteUserPage"></pagedetails>
     </div>
   </div>
 </template>
@@ -36,9 +44,11 @@ export default {
     return {
       creatingSomething: false,
       selectedPage: false,
+      inSettings: false,
       clickedPage: {},
       userPages: [],
-      newPage: {}
+      newPage: {},
+      postBorderColor: ''
     }
   },
   components: {
@@ -86,6 +96,10 @@ export default {
       this.clickedPage = {}
       this.creatingSomething = false
       this.selectedPage = false
+    },
+    postColorChange: function (e) {
+      this.inSettings = false
+      this.postBorderColor = e.target[0].value
     }
   },
   directives: {

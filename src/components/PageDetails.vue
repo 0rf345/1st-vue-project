@@ -20,7 +20,7 @@
     </div>
     <div id="userPosts" v-show="!focOnPost">
       <p>Posts for this page</p>
-      <p v-for="post in posts" :key="post.id" class="userPost" @click="userPostClicked(post)">{{ post.name }}</p>
+      <p v-for="post in posts" :key="post.id" class="userPost" :style="{ border: myBorder }" @click="userPostClicked(post)">{{ post.name }}</p>
     </div>
     <div v-show="focOnPost">
       <p>{{ focPost.name }}</p>
@@ -48,13 +48,8 @@ export default {
     }
   },
   props: [
-    'page'
+    'page', 'borderColor'
   ],
-  computed: {
-    currentPage: function () {
-      return this.page.slice()
-    }
-  },
   methods: {
     changeName: function (e) {
       //  Value of input field
@@ -80,6 +75,11 @@ export default {
     deletePost: function () {
       this.focOnPost = false
       this.posts.splice(this.posts.indexOf(this.focPost), 1)
+    }
+  },
+  computed: {
+    myBorder: function () {
+      return '2px solid ' + this.borderColor
     }
   }
 }
