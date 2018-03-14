@@ -10,7 +10,8 @@
         <span>
           <button class="button" @click="inSettings=true">Settings</button>
           <button class="button" @click="createUserPagePage()" v-focus>+</button>
-          <button class="button" @click="createJSONdata()">JSON of Data</button>
+          <button class="button" @click="createJSONdata()">Download JSON Data</button>
+          <label>Import JSON file: </label><input value="Choose JSON File" type="file" @change="importJSONdata" />
         </span>
         <div id="userPages">
           <p>User Created Pages</p>
@@ -26,11 +27,11 @@
         </form>
       </div>
       <div v-show="creatingSomething">
-        <userpages @UPsUpdated="updateUserPages($event)" @upcCancelled="cancelSubmission"></userpages>
+        <userpages :impPages="importPages" @UPsUpdated="updateUserPages($event)" @upcCancelled="cancelSubmission"></userpages>
       </div>
     </div>
     <div class="pageDetails" v-show="selectedPage">
-      <pagedetails :stringAlert="iWantAstring" @JSONposts="getJSONposts" :borderColor="postBorderColor" :page="clickedPage" @changedNameOfUP="clickedPage.name = $event" @deletePage="deleteUserPage"></pagedetails>
+      <pagedetails :impP="shouldImport" :impPosts="importPosts" :stringAlert="iWantAstring" @JSONposts="getJSONposts" :borderColor="postBorderColor" :page="clickedPage" @changedNameOfUP="clickedPage.name = $event" @deletePage="deleteUserPage"></pagedetails>
     </div>
   </div>
 </template>
@@ -48,10 +49,14 @@ export default {
       selectedPage: false,
       inSettings: false,
       iWantAstring: false,
+      shouldImport: false,
       clickedPage: {},
       userPages: [],
       newPage: {},
-      postBorderColor: ''
+      importPages: [],
+      importPosts: {},
+      postBorderColor: '',
+      jsonImportFile: ''
     }
   },
   components: {
@@ -75,6 +80,19 @@ export default {
         this.$emit('gotIt')
         this.creatingSomething = false
         this.selectedPage = false
+      }
+    },
+    jsonImportFile: function () {
+      if (this.jsonImportFile !== '') {
+        let jsonObj = JSON.parse(this.jsonImportFile)
+        this.userPages = []
+        for (let key in jsonObj.pages) {
+          this.importPages.push({name: jsonObj.pages[key].name})
+        }
+        for (let key in jsonObj.posts) {
+          this.importPosts[key] = Object.assign({}, jsonObj.posts[key])
+        }
+        this.shouldImport = true
       }
     }
   },
@@ -113,11 +131,24 @@ export default {
       var blob = new Blob([this.jsonPages + e], {type: 'text/plain;charset=utf-8'})
       FileSaver.saveAs(blob, 'project-data.json')
       console.log(this.jsonPages + e)
+    },
+    importJSONdata: function (e) {
+      var files = e.target.files || e.dataTransfer.files
+      if (!files.length) {
+        return
+      }
+      var fr = new FileReader()
+
+      var that = this
+      fr.onload = function () {
+        that.jsonImportFile = this.result
+      }
+      fr.readAsText(e.target.files[0])
     }
   },
   computed: {
     jsonPages: function () {
-      return 'Pages: ' + JSON.stringify(this.userPages)
+      return '{ "pages": ' + JSON.stringify(this.userPages) + ', '
     }
   },
   directives: {

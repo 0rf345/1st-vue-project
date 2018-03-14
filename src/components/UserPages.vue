@@ -19,6 +19,9 @@ export default {
       newPage: {}
     }
   },
+  props: [
+    'impPages'
+  ],
   methods: {
     createUserPage: function () {
       this.userPages.push(Object.assign({}, this.newPage))
@@ -35,6 +38,16 @@ export default {
       // directive definition
       inserted: function (el) {
         el.focus()
+      }
+    }
+  },
+  watch: {
+    impPages: function () {
+      if (this.impPages !== []) {
+        for (let page in this.impPages) {
+          this.userPages.push(Object.assign({}, this.impPages[page]))
+        }
+        this.$emit('UPsUpdated', this.userPages)
       }
     }
   }

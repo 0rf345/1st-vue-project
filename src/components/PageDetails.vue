@@ -47,7 +47,7 @@ export default {
     }
   },
   props: [
-    'page', 'borderColor', 'stringAlert'
+    'page', 'borderColor', 'stringAlert', 'impPosts', 'impP'
   ],
   methods: {
     changeName: function (e) {
@@ -95,7 +95,15 @@ export default {
   watch: {
     stringAlert: function () {
       if (this.stringAlert) {
-        this.$emit('JSONposts', 'Posts: ' + JSON.stringify(this.posts))
+        this.$emit('JSONposts', '"posts": ' + JSON.stringify(this.posts) + ' }')
+      }
+    },
+    impP: function () {
+      for (let key in this.impPosts) {
+        this.posts[key] = []
+        for (let keykey in this.impPosts[key]) {
+          this.posts[key].push({ name: this.impPosts[key][keykey].name })
+        }
       }
     }
   }
