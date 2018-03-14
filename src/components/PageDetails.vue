@@ -1,7 +1,7 @@
 <template>
   <div class="pagedetails">
     <p>{{ pageName }}</p>
-    <span>
+    <span v-show="!edittingPage && !addingPost">
       <button class="button" @click="edittingPage = true; addingPost = false">Edit Page</button>
       <button class="button" @click="addingPost = true; edittingPage = false">Add Post</button>
     </span>
