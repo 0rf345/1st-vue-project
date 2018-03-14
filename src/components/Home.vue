@@ -21,7 +21,7 @@
       </div>
     </div>
     <div class="pageDetails" v-else>
-      <pagedetails :page="clickedPage" @changedNameOfUP="clickedPage.name = $event"></pagedetails>
+      <pagedetails :page="clickedPage" @changedNameOfUP="clickedPage.name = $event" @deletePage="deleteUserPage"></pagedetails>
     </div>
   </div>
 </template>
@@ -71,6 +71,12 @@ export default {
       this.selectedPage = true
       this.$emit('createBackButton')
       this.clickedPage = userPage
+    },
+    deleteUserPage: function () {
+      this.userPages.splice(this.userPages.indexOf(this.clickedPage), 1)
+      this.clickedPage = {}
+      this.creatingSomething = false
+      this.selectedPage = false
     }
   },
   directives: {

@@ -10,6 +10,7 @@
         <input type="text" placeholder="Enter new name" required />
         <button type="submit">Change</button><button @click="edittingPage = false">Cancel</button>
       </form>
+      <button class="red" @click="deletePage()">Delete Page</button>
     </div>
     <div v-if="addingPost">
       <form @submit.prevent="addPost">
@@ -54,6 +55,9 @@ export default {
     addPost: function (e) {
       this.posts.push({name: e.target[0].value})
       this.addingPost = false
+    },
+    deletePage: function () {
+      this.$emit('deletePage')
     }
   }
 }
@@ -90,5 +94,9 @@ export default {
 
 .userPost:hover {
   background-color: rgb(203, 245, 255);
+}
+
+.red {
+  background-color: red;
 }
 </style>
